@@ -2,5 +2,6 @@
   <Folder Name="/src/">
     <Project Path="src/AspDotNetCoreInAction/AspDotNetCoreInAction.csproj" />
     <Project Path="src/Demos/Demos.csproj" />
+    <Project Path="src/EntityFramework/EntityFramework.csproj" />
   </Folder>
 </Solution>
