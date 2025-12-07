@@ -70,8 +70,9 @@ class Handlers
                 { "person", new[] {"Invalid data."} }
             });
         }
-        Person.All.Add(Person.All.Count + 1, person);
-        return TypedResults.Created($"/person/{Person.All.Count + 1}", person);
+        int idIndex = Person.All.Keys.DefaultIfEmpty(0).Max() + 1;
+        Person.All.Add(idIndex, person);
+        return TypedResults.Created($"/person/{idIndex}", person);
     }
 
     internal static IResult InsertPerson(int id, Person person)
