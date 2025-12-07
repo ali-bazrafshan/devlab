@@ -15,11 +15,11 @@ app.UseStatusCodePages(); // Makes all error responses return Problem Details
 
 app.MapGet("/", () => "Hello.");
 
-app.MapGet("/person", () => Person.All);
-app.MapGet("/person/{id}", Handlers.GetPerson).AddEndpointFilterFactory(ValidationHelper.ValidateIdFactory);
-app.MapPost("/person", Handlers.AddPerson);
-app.MapPost("person/{id}", Handlers.InsertPerson)
-    .AddEndpointFilter(ValidationHelper.ValidateId)
+var personApi = app.MapGroup("/person").AddEndpointFilterFactory(ValidationHelper.ValidateIdFactory);
+personApi.MapGet("/", () => Person.All);
+personApi.MapPost("/", Handlers.AddPerson);
+personApi.MapGet("/{id}", Handlers.GetPerson);
+personApi.MapPost("/{id}", Handlers.InsertPerson)
     .AddEndpointFilter(async (context, next) =>
     {
         app.Logger.LogInformation("Logging...");
@@ -27,8 +27,8 @@ app.MapPost("person/{id}", Handlers.InsertPerson)
         app.Logger.LogInformation($"Handler result: {result}");
         return result;
     });
-app.MapPut("/person/{id}", Handlers.ReplacePerson);
-app.MapDelete("/person/{id}", Handlers.DeletePerson);
+personApi.MapPut("{id}", Handlers.ReplacePerson);
+personApi.MapDelete("{id}", Handlers.DeletePerson);
 
 app.MapGet("/custom", (HttpResponse response) =>
 {
