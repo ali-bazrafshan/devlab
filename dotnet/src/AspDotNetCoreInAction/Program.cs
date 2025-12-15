@@ -50,6 +50,8 @@ app.MapPost("/product/{category}/{title}/{id}/{price}", ProductHandlers.AddProdu
 app.MapGet("/product/{category}/{title=all}/{id?}", ProductHandlers.GetProduct);
 app.MapGet("/product", () => Product.All);
 
+app.MapGet("/add/{**others}", (string others) => others.Split('/').Aggregate(0, (sum, next) => sum + int.Parse(next)));
+
 app.MapHealthChecks("/healthz");
 
 app.Run();
