@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddProblemDetails(); // Makes exception handlers return Problem Details
 builder.Services.AddHealthChecks();
 
+builder.Services.AddScoped<IDataContext, DataContext>();
+builder.Services.AddScoped<Repository>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -53,6 +56,13 @@ app.MapGet("/product", () => Product.All);
 app.MapGet("/add/{**others}", (string others) => others.Split('/').Aggregate(0, (sum, next) => sum + int.Parse(next)));
 
 app.MapHealthChecks("/healthz");
+
+/**
+ * Transient: row counts are different from each other and unique in each request
+ * Scoped:    row counts are the same but unique in each request
+ * Singleton: row counts are the same in each request
+ */
+app.MapGet("/row-count", (Repository repository, IDataContext context) => $"{repository.RowCount} and {context.RowCount}");
 
 app.Run();
 
@@ -194,4 +204,29 @@ class ValidationHelper
             return await next(invocationContext);
         };
     }
+}
+
+/**
+ * Database simulation
+ */
+
+interface IDataContext
+{
+    int RowCount { get; }
+}
+class DataContext : IDataContext
+{
+    public int RowCount { get; } = Random.Shared.Next(0, 1_000_000_000);
+}
+
+class Repository
+{
+    private readonly IDataContext _context;
+
+    public Repository(IDataContext context)
+    {
+        _context = context;
+    }
+
+    public int RowCount => _context.RowCount;
 }

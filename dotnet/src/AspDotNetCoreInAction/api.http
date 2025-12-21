@@ -24,3 +24,6 @@ Content-Type: application/json
 
 ### Get a list of people
 GET https://localhost:7156/person
+
+### Get row count
+GET https://localhost:7156/row-count
