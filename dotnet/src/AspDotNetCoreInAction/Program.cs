@@ -2,6 +2,9 @@ using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddProblemDetails(); // Makes exception handlers return Problem Details
 builder.Services.AddHealthChecks();
 
@@ -9,6 +12,9 @@ builder.Services.AddScoped<IDataContext, DataContext>();
 builder.Services.AddScoped<Repository>();
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 if (!app.Environment.IsDevelopment())
 {
