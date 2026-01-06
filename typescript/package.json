@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc src/index.ts --noEmit"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
