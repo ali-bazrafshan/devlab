@@ -12,7 +12,7 @@ using var channel = await connection.CreateChannelAsync();
 // Consumer also declares the queue, because it might not be created by a publisher yet
 await channel.QueueDeclareAsync(
     queue: "test-queue",
-    durable: false,
+    durable: true,
     exclusive: false,
     autoDelete: false,
     arguments: null
