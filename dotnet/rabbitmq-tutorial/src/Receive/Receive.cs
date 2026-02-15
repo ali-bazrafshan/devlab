@@ -18,6 +18,9 @@ await channel.QueueDeclareAsync(
     arguments: null
 );
 
+// Configure quality of service parameters: how many messages consumer can prefetch before acknowledging previous ones
+await channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false);
+
 // Register a consumer
 var consumer = new AsyncEventingBasicConsumer(channel);
 consumer.ReceivedAsync += async (model, ea) =>
