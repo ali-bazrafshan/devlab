@@ -9,17 +9,14 @@ var factory = new ConnectionFactory
 using var connection = await factory.CreateConnectionAsync();
 using var channel = await connection.CreateChannelAsync();
 
-// Consumer also declares the queue, because it might not be created by a publisher yet
-await channel.QueueDeclareAsync(
-    queue: "test-queue",
-    durable: true,
-    exclusive: false,
-    autoDelete: false,
-    arguments: null
-);
+// Create a new exchange. This operation is idempotent
+await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
 
-// Configure quality of service parameters: how many messages consumer can prefetch before acknowledging previous ones
-await channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false);
+// Create a temporary queue with a random name
+var queue = await channel.QueueDeclareAsync();
+
+// Bind the exchange to the queue
+await channel.QueueBindAsync(queue: queue.QueueName, exchange: "logs", routingKey: string.Empty);
 
 // Register a consumer
 var consumer = new AsyncEventingBasicConsumer(channel);
@@ -37,10 +34,11 @@ consumer.ReceivedAsync += async (model, ea) =>
 };
 
 await channel.BasicConsumeAsync(
-    queue: "test-queue",
+    queue: queue.QueueName,
     autoAck: false,
     consumer: consumer
 );
 
 // Wait for messages
+Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
