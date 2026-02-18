@@ -3,5 +3,6 @@
     <Project Path="src/AspDotNetCoreInAction/AspDotNetCoreInAction.csproj" />
     <Project Path="src/AttributeDemo/AttributeDemo.csproj" />
     <Project Path="src/EntityFramework/EntityFramework.csproj" />
+    <Project Path="src/Redis/Redis.csproj" />
   </Folder>
 </Solution>
