@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Receive/Receive.csproj" />
+    <Project Path="src/RPCClient/RPCClient.csproj" />
+    <Project Path="src/RPCServer/RPCServer.csproj" />
     <Project Path="src/Send/Send.csproj" />
   </Folder>
 </Solution>
